@@ -1,0 +1,14 @@
+#pyosPlace {
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	border: 2px;
+}
+#canvas {
+	 border: 1px solid black; 
+}
+#header {
+	font-size: 150%;
+	text-align: center;
+	font-family: monospace
+}
