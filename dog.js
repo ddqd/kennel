@@ -1,6 +1,6 @@
 
-var example = document.getElementById("canvas");
-var ctx = example.getContext('2d');  // Контекст холста
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext('2d');  // Контекст холста
 
 Image.prototype.setX = function setX (x) {
 	this.X = x;
@@ -39,17 +39,17 @@ function createDog() {
 }
 
 function startMove() {
-	clear();
+	// clear();
 	for(var i = 0; i<10; i++) {
-		move(dogs[i]);		
+		// move(dogs[i]);		
 	}
 }
 
 function move(dog) {
 
 	dog.X = rnd(dog.X-5, dog.X+5);
-	dog.Y = rnd(dog.Y-5, dog.Y+5);
-	ctx.drawImage(dog, dog.X , dog.Y, dog.width, dog.height);
+	//dog.Y = rnd(dog.Y-5, dog.Y+5);
+	//ctx.drawImage(dog, dog.X , dog.Y, dog.width, dog.height);
 }
 
 window.onload = function() { 
@@ -61,6 +61,27 @@ function moveTimer() {
 	 var timer = setInterval((function(){startMove()}),rnd(200,1500))
 }
 
+canvas.addEventListener('click', function(e) {
+   var pos = {
+       x : e.pageX - 800,
+       y : e.pageY - 600
+   };
+   addDog(pos);
+}, false);
+
+
+function addDog(pos) {
+	// var dog = generateDog();
+	// dog.X = pos.x;
+	// dog.Y = pos.Y;
+	// dogs[dogs.length-1] = dog;
+
+clear();
+console.log();
+
+for(var i = 0; i<dogs.length-1; i++)
+	ctx.drawImage(dogs[i], dogs[i].X ,dogs[i].Y, dogs[i].width, dogs[i].height);
+}
 
 
 
