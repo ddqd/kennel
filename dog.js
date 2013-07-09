@@ -78,7 +78,7 @@ canvas.addEventListener('click', function(e) {
 }, false);
 
 function addDog(pos, dog) {
-	
+    clear();
 	dog.X = pos.x;
 	dog.Y = pos.y;
 	dogs[dogs.length] = dog;
