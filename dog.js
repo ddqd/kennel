@@ -10,7 +10,7 @@ Image.prototype.setY = function setY (y) {
 }
 
 function clear () {
-	ctx.clearRect ( 0 , 0 , 800 , 600 );
+	ctx.clearRect (0, 0, canvas.width, canvas.height);
 }
 
 function rnd(min, max) {
@@ -28,7 +28,6 @@ function generateDog() {
 }
 
 var dogs = new Array();
-
 
 function createDog() {
 	for (var i=0; i<10; i++) {
@@ -62,15 +61,21 @@ function moveTimer() {
 	 var timer = setInterval((function(){startMove()}),rnd(200,1500))
 }
 
+function getMousePos(canvas, e) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
 canvas.addEventListener('click', function(e) {
    var dog = generateDog();
-   var pos = {
-       x : e.clientX - canvas.offsetLeft-dog.width/2,
-       y : e.clientY - canvas.offsetTop-dog.height/2
-   };
+   var pos = getMousePos(canvas, e);
+   pos.x = pos.x - dog.width/2
+   pos.y = pos.y - dog.height/2
    addDog(pos,dog);
 }, false);
-
 
 function addDog(pos, dog) {
 	
