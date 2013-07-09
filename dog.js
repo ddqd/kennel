@@ -1,5 +1,6 @@
 
 var canvas = document.getElementById("canvas");
+var yarr = document.getElementById("yarr");
 var ctx = canvas.getContext('2d');
 
 Image.prototype.setX = function setX (x) {
@@ -12,6 +13,8 @@ Image.prototype.setY = function setY (y) {
 function clear () {
 	ctx.clearRect (0, 0, canvas.width, canvas.height);
 }
+
+
 
 function rnd(min, max) {
 	 return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -73,8 +76,19 @@ canvas.addEventListener('click', function(e) {
 }, false);
 
 canvas.addEventListener('mousemove', function(e) {
-    addDog(e);
+    if(yarr.checked)
+        addDog(e);
 }, false);
+
+
+document.getElementById('clear').addEventListener('click', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    killallDogs();
+}, false);
+
+function killallDogs() {
+    dogs = [];
+}
 
 function addDog(e) {
     var dog = generateDog();
