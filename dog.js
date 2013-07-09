@@ -21,8 +21,8 @@ function generateDog() {
 	var dog = new Image;
 	dog.width = rnd(80,100);
 	dog.height = rnd(80,100);
-	dog.X = rnd(30,500);
-	dog.Y = rnd(30,500);
+	dog.setX(rnd(30,500));
+	dog.setY(rnd(30,500));
 	dog.src = 'dog.png';
 	return dog;
 }
@@ -46,7 +46,6 @@ function startMove() {
 }
 
 function move(dog) {
-
 	dog.X = rnd(dog.X-5, dog.X+5);
 	dog.Y = rnd(dog.Y-5, dog.Y+5);
 	ctx.drawImage(dog, dog.X , dog.Y, dog.width, dog.height);
@@ -70,19 +69,25 @@ function getMousePos(canvas, e) {
       }
 
 canvas.addEventListener('click', function(e) {
-   var dog = generateDog();
-   var pos = getMousePos(canvas, e);
-   pos.x = pos.x - dog.width/2
-   pos.y = pos.y - dog.height/2
-   addDog(pos,dog);
+    addDog(e);
 }, false);
 
-function addDog(pos, dog) {
-    clear();
-	dog.X = pos.x;
-	dog.Y = pos.y;
-	dogs[dogs.length] = dog;
+canvas.addEventListener('mousemove', function(e) {
+    addDog(e);
+}, false);
 
-for(var i = 0; i<dogs.length; i++)
-	ctx.drawImage(dogs[i], dogs[i].X ,dogs[i].Y, dogs[i].width, dogs[i].height);
+function addDog(e) {
+    var dog = generateDog();
+    var pos = getMousePos(canvas, e);
+    dog.X = pos.x - dog.width/2
+    dog.Y = pos.y - dog.height/2
+    drawDog(dog);
+}
+
+function drawDog(dog) {
+    clear();
+	dogs[dogs.length] = dog;
+    for(var i = 0; i<dogs.length; i++) {
+        ctx.drawImage(dogs[i], dogs[i].X ,dogs[i].Y, dogs[i].width, dogs[i].height);
+    }
 }
