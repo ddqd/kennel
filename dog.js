@@ -19,8 +19,8 @@ function rnd(min, max) {
 
 function generateDog() {
 	var dog = new Image;
-	dog.width = rnd(50,70);
-	dog.height = rnd(50,70);
+	dog.width = rnd(80,100);
+	dog.height = rnd(80,100);
 	dog.X = rnd(30,500);
 	dog.Y = rnd(30,500);
 	dog.src = 'dog.png';
@@ -63,16 +63,17 @@ function moveTimer() {
 }
 
 canvas.addEventListener('click', function(e) {
+   var dog = generateDog();
    var pos = {
-       x : e.clientX - canvas.offsetLeft,
-       y : e.clientY - canvas.offsetTop
+       x : e.clientX - canvas.offsetLeft-dog.width/2,
+       y : e.clientY - canvas.offsetTop-dog.height/2
    };
-   addDog(pos);
+   addDog(pos,dog);
 }, false);
 
 
-function addDog(pos) {
-	var dog = generateDog();
+function addDog(pos, dog) {
+	
 	dog.X = pos.x;
 	dog.Y = pos.y;
 	dogs[dogs.length] = dog;
