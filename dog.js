@@ -64,8 +64,8 @@ function moveTimer() {
 
 canvas.addEventListener('click', function(e) {
    var pos = {
-       x : e.pageX-400,
-       y : e.pageY-100
+       x : e.clientX - canvas.offsetLeft,
+       y : e.clientY - canvas.offsetTop
    };
    addDog(pos);
 }, false);
