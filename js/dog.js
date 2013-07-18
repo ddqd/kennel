@@ -1,18 +1,34 @@
-
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext('2d');
+var dogs = [new Image];
+var ctx;
+var canvas;
 
 Image.prototype.setX = function setX (x) {
-	this.X = x;
+    this.X = x;
 }
 Image.prototype.setY = function setY (y) {
-	this.Y = y;
+    this.Y = y;
 }
 
-var dogs = new Array();
+contentLoaded(window, 
+    function () {
+
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext('2d');
+
+    canvas.addEventListener('click', function(e) {
+         addDog(e);
+    }, false);
+
+    document.getElementById('clear').addEventListener('click', function() {
+    	clear();
+        killAllDogs();
+    }, false);
+
+    createDog();
+});
 
 function clear () {
-	ctx.clearRect (0, 0, canvas.width, canvas.height);
+    ctx.clearRect (0, 0, canvas.width, canvas.height);
 }
 
 function killAllDogs() {
@@ -20,44 +36,58 @@ function killAllDogs() {
 }
 
 function rnd(min, max) {
-	 return Math.floor(Math.random() * (max - min + 1)) + min;
+     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function generateDog() {
-	var dog = new Image();
-	dog.width = rnd(80,100)
-	dog.height = rnd(80,100)
-	dog.setX(rnd(30,500));
-	dog.setY(rnd(30,500));
-	dog.src = 'dog.png';
+    var dog = new Image();
+    dog.width = rnd(80,100)
+    dog.height = rnd(80,100)
+    dog.src = 'img/dog.png';
     return dog;
 }
 
 function createDog() {
     for (var i=0; i<10; i++) {
     var dog = generateDog();
+    dog.X = rnd(0,600);
+    dog.Y = rnd(0,700);
     dogs[i] = dog;
-    dogs[i].X = rnd(0,600);
-    dogs[i].Y = rnd(0,700);
-    drawDog(dog);
-	}
-}
-
-function startMove() {
-	clear();
-	for(var i = 0; i<dogs.length; i++) {
-		 move(dogs[i]);		
-	}
-}
-
-function move(dog) {
-	dog.X = rnd(dog.X-5, dog.X+5);
-	dog.Y = rnd(dog.Y-5, dog.Y+5);
-	ctx.drawImage(dog, dog.X , dog.Y, dog.width, dog.height);
+    }
+    moveTimer();
 }
 
 function moveTimer() {
-	 var timer = setInterval((function(){startMove()}),rnd(200,1500))
+     var timer = setInterval(function() {setTimeout(startMove(), rnd(10,50)) },50);
+}
+
+function startMove() {
+    clear();
+    var randomDogIndex = function () {
+       return rnd(0, dogs.length-1);
+    }
+
+    var start = randomDogIndex();
+    var end = randomDogIndex();
+    if(end>start){
+        start = Math.abs(start - end);
+    }
+
+   for (var i = start; i<end; i++) {
+        move(i);
+   }
+   redrawDogs();
+}
+
+function move(i) {
+    dogs[i].X = rnd(dogs[i].X-5, dogs[i].X+5);
+    dogs[i].Y = rnd(dogs[i].Y-5, dogs[i].Y+5);
+}
+
+function redrawDogs() {
+    for(var i = 0; i<dogs.length; i++) {
+      ctx.drawImage(dogs[i], dogs[i].X, dogs[i].Y, dogs[i].width, dogs[i].height);
+    }
 }
 
 function getMousePos(canvas, e) {
@@ -68,33 +98,15 @@ function getMousePos(canvas, e) {
         };
       }
 
-canvas.addEventListener('click', function(e) {
-    addDog(e);
-}, false);
-
-canvas.addEventListener('mousemove', function(e) {
-    if (e.which === 1) {
-        addDog(e);
-    }
-    	
-}, false);
-
-
-document.getElementById('clear').addEventListener('click', function() {
-	clear();
-    killAllDogs();
-}, false);
-
 function addDog(e) {
     var pos = getMousePos(canvas, e);
     var dog = generateDog();
-    dog.onload = function() {
-       	dog.src = getNewImageSrc(dog);
+     	dog.src = getNewImageSrc(dog);
         dog.X = pos.x - dog.width/2
         dog.Y = pos.y - dog.height/2
-        dogs[dogs.length] = dog;
-        drawDog(dog);
-    }
+        var i = dogs.length
+        dogs[i] = dog;
+        ctx.drawImage(dogs[i], dogs[i].X, dogs[i].Y, dogs[i].width, dogs[i].height);
 }
 
 function setRandomColor(imageData) {
@@ -131,15 +143,4 @@ function getNewImageSrc(img) {
 	var dataURL = canv.toDataURL('image/  png'); 
     ct.clearRect(0,0,canv.width, canv.height);
 	return dataURL;
-}
-
-function drawDog(dog) {
-    dog.onload = function() {
-        ctx.drawImage(dog, dog.X, dog.Y, dog.width, dog.height);
-    }
-}
-
-window.onload = function() { 
-    createDog();
-    moveTimer();
 }
