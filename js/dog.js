@@ -93,8 +93,8 @@ function redrawDogs() {
 function getMousePos(canvas, e) {
         var rect = canvas.getBoundingClientRect();
         return {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
         };
       }
 
@@ -135,12 +135,20 @@ function getNewImageSrc(img) {
 	canv.width = img.width;  
 	canv.height = img.height;  
 	var ct = canv.getContext("2d");  
-	ct.drawImage(img,0,0,img.width,img.height);
+    if(rnd(0,1)) {
+        ct.translate(img.width, 0);
+        ct.scale(-1,1);
+    }
+    ct.drawImage(img,0,0,img.width,img.height);
 	var imageData = ct.getImageData(0, 0, img.width, img.height);
 	imageData.data = setRandomColor(imageData.data);
 	ct.clearRect(0,0,canv.width, canv.height);
-	ct.putImageData(imageData,0,0);
+	
+    // this.canvasContext.drawImage(image, 0, 0);
+    ct.putImageData(imageData,0,0);
+
 	var dataURL = canv.toDataURL('image/  png'); 
     ct.clearRect(0,0,canv.width, canv.height);
 	return dataURL;
 }
+
